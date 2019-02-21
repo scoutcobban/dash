@@ -12,3 +12,20 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.widget-frame {
+  border: 1px solid #61dafb;
+  box-shadow: 0 2px 3px rgba(0,0,0,0.16);
+  display: inline-block;
+  margin: 0 0 1.5em;
+  width: 100%;
+}
+
+header {
+  background-color: #666;
+  padding: 3px;
+  text-align: left;
+  font-size: 15px;
+  display: flow;
+  color: white;
+}

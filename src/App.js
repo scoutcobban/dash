@@ -1,48 +1,76 @@
 import React, {Component} from 'react';
 import ReactGridLayout from "react-grid-layout";
 import './App.css';
-import {Widget, MyJobsWidget, JobNeedsWidget, JobQuestionsWidget} from "./widgets";
+import {
+    Widget,
+    MyJobsWidget,
+    JobNeedsWidget,
+    JobQuestionsWidget
+} from "./widgets";
 
 const HIRING_HOST = "https://localhost:5000";
 
 const WIDGET_LIBRARY = {
-    myJobs: {component: MyJobsWidget, roles: ["job-owner"]},
+    myJobs: {
+        component: MyJobsWidget,
+        roles: ["job-owner"],
+        title: "My Jobs in Scout"
+    },
     jobNeeds: {
         component: JobNeedsWidget,
-        dataUrl: HIRING_HOST + "/hiring/my-jobs-dashboard"
+        dataUrl: HIRING_HOST + "/hiring/my-jobs-dashboard",
+        title: "Jobs that Need Love"
     },
-    jobQuestions: {component: JobQuestionsWidget}
+    jobQuestions: {
+        component: JobQuestionsWidget,
+        title: "Job Questions"
+    }
 };
 
 class App extends Component {
-  render() {
-    const component1 = WIDGET_LIBRARY['myJobs'].component; //TODO conver to map from user data load
-    const config1 = {filter: "open", count: 2};
-    const component2 = WIDGET_LIBRARY['myJobs'].component;
-    const config2 = {filter: "closed", count: 3};
-    const component3 = WIDGET_LIBRARY['jobQuestions'].component;
-    const config3 = {count: 6};
+    constructor(props){
+        super(props);
+        this.state = {
+            layout_loaded: [
+                {i: 'a', x: 0, y: 0, w: 1, h: 2, static: true},
+                {i: 'b', x: 1, y: 0, w: 3, h: 2, minW: 2, maxW: 4},
+                {i: 'c', x: 4, y: 0, w: 1, h: 2}
+            ],
+            widgets_loaded: [
+                {key: 'a', name: 'myJobs', config:{filter: "open"}},
+                {key: 'b', name: 'myJobs', config:{filter: "closed"}},
+                {key: 'c', name: 'jobQuestions', config:{jobId: "*"}},
+            ]
+        }
 
-    const layout = [
-      {i: 'a', x: 0, y: 0, w: 1, h: 2, static: true},
-      {i: 'b', x: 1, y: 0, w: 3, h: 2, minW: 2, maxW: 4},
-      {i: 'c', x: 4, y: 0, w: 1, h: 2}
-    ];
+    }
 
-    return (
-      <div className="App">
-        <header className="App-header">
-          <div>Header</div>
-<ReactGridLayout className="layout" layout={layout} cols={12} rowHeight={30} width={1200}>
-          <Widget key="a" component={component1} config={config1} />
-          <Widget key="b" component={component2} config={config2} />
-          <Widget key="c" component={component3} config={config3} />
-</ReactGridLayout>
-          <div>Footer</div>
-        </header>
-      </div>
-    );
-  }
+    getConfig(){
+
+    }
+
+    render() {
+
+        const widgets = this.state.widgets_loaded.map((widget)=>{
+            const component = WIDGET_LIBRARY[widget.name].component;
+            const title = WIDGET_LIBRARY[widget.name].title;
+            return <Widget key={widget.key} component={component} title={title} config={widget.config}/>
+        });
+
+        return (
+            <div className="App">
+
+                <header>
+                    <h2>Dashboard</h2>
+                </header>
+
+                <ReactGridLayout className="layout" layout={this.state.layout_loaded} cols={12}
+                                 rowHeight={120} width={800}>
+                    {widgets}
+                </ReactGridLayout>
+            </div>
+        );
+    }
 }
 
 export default App;
