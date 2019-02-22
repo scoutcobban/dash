@@ -21,11 +21,8 @@ export class Widget extends React.Component {
         };
     }
 
-    getConfig () {
-        return this.state.config;
-    }
-
     setConfig = (config) => {
+        console.log("Save widget config:", config, this.props.id);
         this.setState({config: config});
     };
 
@@ -50,18 +47,30 @@ export class MyJobsWidget extends React.Component {
         this.state = {count:0, jobs:[], loading: true};
     }
     componentDidMount(){
-        console.log("getting MyJobsWidget "+ this.props.filter);
+        this.loadData();
+    }
+
+    loadData() {
+        console.log("getting MyJobsWidget " + this.props.filter);
         let apiMyJobs = delayPromise(Math.floor(Math.random() * 2000));
         apiMyJobs((data) => {
             console.log(this.props.filter, "data", data);
             this.setState({...data, loading: false});
-        }, {count: Math.floor(Math.random() * 10), jobs:[{title:'job title 1', reqId:'123'}, {title:'job title 2', reqId:'456'}]});  // fake data
+        }, {
+            count: Math.floor(Math.random() * 10),
+            jobs: [{title: 'job title 1', reqId: '123'}, {
+                title: 'job title 2',
+                reqId: '456'
+            }]
+        });  // fake data
     }
 
     configChange = () => {  // This NEEDS to be an arrow func for callback
         console.log("configChange", this.props, this.state);
         const fakeConfig = {filter: "paused"};
         this.props.setConfig(fakeConfig);
+        this.setState({loading: true})
+        this.loadData();
     };
 
     render() {
