@@ -1,12 +1,15 @@
 import React, {Component} from 'react';
-import ReactGridLayout from "react-grid-layout";
-import './App.css';
+import GridLayout from 'react-grid-layout';
+import _ from 'lodash';
 import {
     Widget,
     MyJobsWidget,
     JobNeedsWidget,
     JobQuestionsWidget
 } from "./widgets";
+import 'react-grid-layout/css/styles.css';
+import 'react-resizable/css/styles.css';
+// const ReactGridLayout = WidthProvider(RGL);
 
 const HIRING_HOST = "https://localhost:5000";
 
@@ -29,18 +32,27 @@ const WIDGET_LIBRARY = {
 };
 
 class App extends Component {
-    constructor(props){
+    static defaultProps = {
+        className: "layout",
+        items: 20,
+        rowHeight: 30,
+        onLayoutChange: function () {
+        },
+        cols: 12
+    };
+
+    constructor(props) {
         super(props);
         this.state = {
             layout: [
-                {i: 'a', x: 0, y: 0, w: 2, h: 2},
-                {i: 'b', x: 1, y: 0, w: 2, h: 2},
-                {i: 'c', x: 2, y: 0, w: 2, h: 4}
+                {i: 'a', x: 0, y: 0, w: 3, h: 1},
+                {i: 'b', x: 3, y: 0, w: 3, h: 1},
+                {i: 'c', x: 6, y: 0, w: 3, h: 1, static: true}
             ],
             widgets: [
-                {key: 'a', name: 'myJobs', config:{filter: "open"}},
-                {key: 'b', name: 'myJobs', config:{filter: "closed"}},
-                {key: 'c', name: 'jobQuestions', config:{jobId: "*"}},
+                {key: 'a', name: 'myJobs', config: {filter: "open"}},
+                {key: 'b', name: 'myJobs', config: {filter: "closed"}},
+                {key: 'c', name: 'jobQuestions', config: {jobId: "*"}},
             ]
         }
 
@@ -51,23 +63,54 @@ class App extends Component {
         this.setState(layout);
     }
 
-    addWidget(){
-
+    addWidget = () => {
+        const guid = 'd';
+        const name = 'jobNeeds';
+        console.log("adding ",name ," guid", guid);
+        const layout = this.state.layout.concat({
+            i: guid,
+            x: (this.state.layout.length * 3) % (this.state.cols || 12),
+            y: Infinity, // puts it at the bottom
+            w: 3,
+            h: 1
+        });
+        const widgets = this.state.layout.concat({
+            key: guid, name: name, config: {}
+        });
+        this.setState({layout, widgets});
     }
 
-      // onRemoveItem(i) {
-      //   console.log("removing", i);
-      //   this.setState({ items: _.reject(this.state.items, { i: i }) });
-      // }
+    removeWidget(guid) {
+      console.log("removing", guid);
+      const layout = _.reject(this.state.layout, { i: guid });
+      const widgets = _.reject(this.state.widgets, { key: guid });
+      console.log("layout", layout);
+      console.log("widgets", widgets);
+      this.setState({layout, widgets});
+    }
 
-    makeWidget(widget){
+    makeWidget(widget) {
+            const removeStyle = {
+      position: "absolute",
+      right: "2px",
+      top: 0,
+      cursor: "pointer"
+    };
         const component = WIDGET_LIBRARY[widget.name].component;
         const title = WIDGET_LIBRARY[widget.name].title;
-        return <Widget key={widget.key}
-                       id={widget.key}
-                       component={component}
-                       title={title}
-                       config={widget.config}/>
+        return <div key={widget.key}>
+            <div>{title}<span
+          className="remove"
+          style={removeStyle}
+          onClick={this.removeWidget.bind(this, widget.key)}
+        >
+          x
+        </span></div>
+            <Widget guid={widget.key}
+                    component={component}
+                    // title={title}
+                    config={widget.config}/>
+        </div>
     }
 
     render() {
@@ -84,17 +127,38 @@ class App extends Component {
                     <button onClick={this.addWidget}>Add Widget</button>
                 </header>
 
-                <ReactGridLayout className="layout"
-                                 layout={this.state.layout}
-                                 onLayoutChange={this.layoutChange}
-                                 cols={12}
-                                 rowHeight={120}
-                                 width={800}>
+                <GridLayout className="layout"
+                            layout={this.state.layout}
+                            onLayoutChange={this.layoutChange}
+                            cols={12}
+                            rowHeight={120}
+                            width={800}>
                     {widgets}
-                </ReactGridLayout>
+                </GridLayout>
             </div>
         );
     }
 }
 
 export default App;
+// import React, {Component} from 'react';
+// import GridLayout from 'react-grid-layout';
+//
+// class App extends React.Component {
+//   render() {
+//     // layout is an array of objects, see the demo for more complete usage
+//     var layout = [
+//       {i: 'a', x: 0, y: 0, w: 1, h: 2, static: true},
+//       {i: 'b', x: 1, y: 0, w: 3, h: 2, minW: 2, maxW: 4},
+//       {i: 'c', x: 4, y: 0, w: 1, h: 2}
+//     ];
+//     return (
+//       <GridLayout className="layout" layout={layout} cols={12} rowHeight={30} width={1200}>
+//         <div key="a">a</div>
+//         <div key="b">b</div>
+//         <div key="c">c</div>
+//       </GridLayout>
+//     )
+//   }
+// }
+// export default App;

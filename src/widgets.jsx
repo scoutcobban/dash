@@ -2,13 +2,13 @@ import React from "react";
 
 
 function delayPromise(duration) {
-  return function(cb, data){
-    return new Promise(function(resolve, reject){
-      setTimeout(function(){
-        resolve(cb(data));
-      }, duration)
-    });
-  };
+    return function (cb, data) {
+        return new Promise(function (resolve, reject) {
+            setTimeout(function () {
+                resolve(cb(data));
+            }, duration)
+        });
+    };
 }
 
 
@@ -22,7 +22,7 @@ export class Widget extends React.Component {
     }
 
     setConfig = (config) => {
-        console.log("Save widget config:", config, this.props.id);
+        console.log("Save widget config:", config, this.props.guid);
         this.setState({config: config});
     };
 
@@ -34,19 +34,20 @@ export class Widget extends React.Component {
         };
         const widget = React.createElement(this.props.component, props);
         return <div className="widget-frame">
-            <div className="widget-title">{this.props.title}</div>
+            {/*<div className="widget-title">{this.props.title}</div>*/}
             <div className="widget-body">{widget}</div>
         </div>
     }
 }
 
 export class MyJobsWidget extends React.Component {
-    constructor (props) {
+    constructor(props) {
         console.log("props", props);
         super(props);
-        this.state = {count:0, jobs:[], loading: true};
+        this.state = {count: 0, jobs: [], loading: true};
     }
-    componentDidMount(){
+
+    componentDidMount() {
         this.loadData();
     }
 
@@ -74,11 +75,13 @@ export class MyJobsWidget extends React.Component {
     };
 
     render() {
-        if(this.state.loading){
+        if (this.state.loading) {
             return <div>loading...</div>;
         }
         const count = this.state.count;
-        const jobs = this.state.jobs.map((job) => {return <div key={job.reqId}>Job: {job.title}({job.reqId})</div>});
+        const jobs = this.state.jobs.map((job) => {
+            return <div key={job.reqId}>Job: {job.title}({job.reqId})</div>
+        });
         return <div>
             {this.props.filter} jobs: {count}.<br/>
             {jobs}
