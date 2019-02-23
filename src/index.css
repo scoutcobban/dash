@@ -13,13 +13,22 @@ code {
     monospace;
 }
 
-/*.widget-frame {*/
-  /*border: 1px solid #61dafb;*/
-  /*box-shadow: 0 2px 3px rgba(0,0,0,0.16);*/
-  /*display: inline-block;*/
-  /*margin: 0 0 1.5em;*/
-  /*width: 100%;*/
-/*}*/
+
+.widget-title {
+  font-weight: bold;
+  border: 1px solid #61dafb;
+  display: inline-block;
+  width: 100%;
+}
+
+
+.widget-frame {
+  border: 1px solid #61dafb;
+  box-shadow: 0 2px 3px rgba(0,0,0,0.16);
+  display: inline-block;
+  margin: 0 0 1.5em;
+  width: 100%;
+}
 
 header {
   background-color: #666;

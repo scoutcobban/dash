@@ -22,7 +22,6 @@ const WIDGET_LIBRARY = {
     },
     jobNeeds: {
         component: JobNeedsWidget,
-        dataUrl: HIRING_HOST + "/hiring/my-jobs-dashboard",
         title: "Jobs that Need Love"
     },
     jobQuestions: {
@@ -61,12 +60,12 @@ class App extends Component {
     layoutChange = (layout) => {
         console.log("Saved to the server:", layout);
         this.setState(layout);
-    }
+    };
 
     addWidget = () => {
         const guid = 'd';
         const name = 'jobNeeds';
-        console.log("adding ",name ," guid", guid);
+        console.log("adding", name, "guid", guid);
         const layout = this.state.layout.concat({
             i: guid,
             x: (this.state.layout.length * 3) % (this.state.cols || 12),
@@ -74,41 +73,38 @@ class App extends Component {
             w: 3,
             h: 1
         });
-        const widgets = this.state.layout.concat({
+        const widgets = this.state.widgets.concat({
             key: guid, name: name, config: {}
         });
         this.setState({layout, widgets});
-    }
+    };
 
     removeWidget(guid) {
-      console.log("removing", guid);
-      const layout = _.reject(this.state.layout, { i: guid });
-      const widgets = _.reject(this.state.widgets, { key: guid });
-      console.log("layout", layout);
-      console.log("widgets", widgets);
-      this.setState({layout, widgets});
+        console.log("removing guid", guid);
+        const layout = _.reject(this.state.layout, {i: guid});
+        const widgets = _.reject(this.state.widgets, {key: guid});
+        this.setState({layout, widgets});
     }
 
     makeWidget(widget) {
-            const removeStyle = {
-      position: "absolute",
-      right: "2px",
-      top: 0,
-      cursor: "pointer"
-    };
+        const removeStyle = {
+            position: "absolute",
+            right: "2px",
+            top: 0,
+            cursor: "pointer"
+        };
         const component = WIDGET_LIBRARY[widget.name].component;
         const title = WIDGET_LIBRARY[widget.name].title;
         return <div key={widget.key}>
-            <div>{title}<span
-          className="remove"
-          style={removeStyle}
-          onClick={this.removeWidget.bind(this, widget.key)}
-        >
-          x
-        </span></div>
+            <div>
+                <span className="widget-title">{title}</span>
+                <span className="remove"
+                      style={removeStyle}
+                      onClick={this.removeWidget.bind(this, widget.key)}
+                >x</span>
+            </div>
             <Widget guid={widget.key}
                     component={component}
-                    // title={title}
                     config={widget.config}/>
         </div>
     }

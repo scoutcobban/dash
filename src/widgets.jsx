@@ -92,7 +92,7 @@ export class MyJobsWidget extends React.Component {
 
 export class JobNeedsWidget extends React.Component {
     render() {
-        return <div>Jobs that Need Love</div>;
+        return <div>Rat Surgeon (A2019ED)<br/> - Why do this job?</div>;
     }
 }
 
