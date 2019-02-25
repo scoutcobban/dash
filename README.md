@@ -5,7 +5,9 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ## Setup `node` and `npm`
 
 This project requires `node 8.15.0` and `npm 6.4.1`.
+
 use `nvm`: https://github.com/creationix/nvm
+
 `nvm install 8.15.0`
 
 `npm install npm@6.4.1 -g`
