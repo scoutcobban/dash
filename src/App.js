@@ -44,9 +44,9 @@ class App extends Component {
         super(props);
         this.state = {
             layout: [
-                {i: 'a', x: 0, y: 0, w: 3, h: 1},
-                {i: 'b', x: 3, y: 0, w: 3, h: 1},
-                {i: 'c', x: 6, y: 0, w: 3, h: 1, static: true}
+                {i: 'a', x: 0, y: 0, w: 4, h: 1},
+                {i: 'b', x: 4, y: 0, w: 4, h: 1},
+                {i: 'c', x: 8, y: 0, w: 4, h: 1}
             ],
             widgets: [
                 {key: 'a', name: 'myJobs', config: {filter: "open"}},
@@ -68,9 +68,9 @@ class App extends Component {
         console.log("adding", name, "guid", guid);
         const layout = this.state.layout.concat({
             i: guid,
-            x: (this.state.layout.length * 3) % (this.state.cols || 12),
+            x: (this.state.layout.length * 4) % (this.state.cols || 12),
             y: Infinity, // puts it at the bottom
-            w: 3,
+            w: 4,
             h: 1
         });
         const widgets = this.state.widgets.concat({
@@ -137,24 +137,3 @@ class App extends Component {
 }
 
 export default App;
-// import React, {Component} from 'react';
-// import GridLayout from 'react-grid-layout';
-//
-// class App extends React.Component {
-//   render() {
-//     // layout is an array of objects, see the demo for more complete usage
-//     var layout = [
-//       {i: 'a', x: 0, y: 0, w: 1, h: 2, static: true},
-//       {i: 'b', x: 1, y: 0, w: 3, h: 2, minW: 2, maxW: 4},
-//       {i: 'c', x: 4, y: 0, w: 1, h: 2}
-//     ];
-//     return (
-//       <GridLayout className="layout" layout={layout} cols={12} rowHeight={30} width={1200}>
-//         <div key="a">a</div>
-//         <div key="b">b</div>
-//         <div key="c">c</div>
-//       </GridLayout>
-//     )
-//   }
-// }
-// export default App;

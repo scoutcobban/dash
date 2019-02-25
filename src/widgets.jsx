@@ -1,15 +1,5 @@
 import React from "react";
-
-
-function delayPromise(duration) {
-    return function (cb, data) {
-        return new Promise(function (resolve, reject) {
-            setTimeout(function () {
-                resolve(cb(data));
-            }, duration)
-        });
-    };
-}
+import {getMyJobsData} from "./api";
 
 
 export class Widget extends React.Component {
@@ -53,24 +43,17 @@ export class MyJobsWidget extends React.Component {
 
     loadData() {
         console.log("getting MyJobsWidget " + this.props.filter);
-        let apiMyJobs = delayPromise(Math.floor(Math.random() * 2000));
-        apiMyJobs((data) => {
+        getMyJobsData(this.props.filter, (data) => {
             console.log(this.props.filter, "data", data);
             this.setState({...data, loading: false});
-        }, {
-            count: Math.floor(Math.random() * 10),
-            jobs: [{title: 'job title 1', reqId: '123'}, {
-                title: 'job title 2',
-                reqId: '456'
-            }]
-        });  // fake data
+        });
     }
 
     configChange = () => {  // This NEEDS to be an arrow func for callback
         console.log("configChange", this.props, this.state);
         const fakeConfig = {filter: "paused"};
         this.props.setConfig(fakeConfig);
-        this.setState({loading: true})
+        this.setState({loading: true});
         this.loadData();
     };
 
@@ -80,10 +63,10 @@ export class MyJobsWidget extends React.Component {
         }
         const count = this.state.count;
         const jobs = this.state.jobs.map((job) => {
-            return <div key={job.reqId}>Job: {job.title}({job.reqId})</div>
+            return <div key={job.reqId}>Job: {job.title} ({job.reqId})</div>
         });
         return <div>
-            {this.props.filter} jobs: {count}.<br/>
+            {this.props.filter} job count: {count}.<br/>
             {jobs}
             <button onClick={this.configChange}>change config</button>
         </div>;
