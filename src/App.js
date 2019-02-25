@@ -1,6 +1,10 @@
 import React, {Component} from 'react';
 import GridLayout from 'react-grid-layout';
+import uuidv1 from "uuid/v1";
 import _ from 'lodash';
+
+
+import {getUserDashboardConfig} from "./api";
 import {
     Widget,
     MyJobsWidget,
@@ -10,8 +14,6 @@ import {
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 // const ReactGridLayout = WidthProvider(RGL);
-
-const HIRING_HOST = "https://localhost:5000";
 
 // Register all the widgets here, limit which role can add what
 const WIDGET_LIBRARY = {
@@ -43,18 +45,22 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            layout: [
-                {i: 'a', x: 0, y: 0, w: 4, h: 1},
-                {i: 'b', x: 4, y: 0, w: 4, h: 1},
-                {i: 'c', x: 8, y: 0, w: 4, h: 1}
-            ],
-            widgets: [
-                {key: 'a', name: 'myJobs', config: {filter: "open"}},
-                {key: 'b', name: 'myJobs', config: {filter: "closed"}},
-                {key: 'c', name: 'jobQuestions', config: {jobId: "*"}},
-            ]
+            loading: true,
+            layout: [],
+            widgets: []
         }
+    }
 
+    componentDidMount() {
+        this.loadData();
+    }
+
+    loadData() {
+        console.log("getting UserDashboardConfig " + this.props.user);
+        getUserDashboardConfig(this.props.user, (data) => {
+            console.log(this.props.user, "data", data);
+            this.setState({...data, loading: false});
+        });
     }
 
     layoutChange = (layout) => {
@@ -62,10 +68,9 @@ class App extends Component {
         this.setState(layout);
     };
 
-    addWidget = () => {
-        const guid = 'd';
-        const name = 'jobNeeds';
-        console.log("adding", name, "guid", guid);
+    addWidget = (name) => {
+        const guid = uuidv1();
+        console.log("adding guid", guid, name);
         const layout = this.state.layout.concat({
             i: guid,
             x: (this.state.layout.length * 4) % (this.state.cols || 12),
@@ -77,6 +82,18 @@ class App extends Component {
             key: guid, name: name, config: {}
         });
         this.setState({layout, widgets});
+    };
+
+    addMyJobs = () => {
+        this.addWidget('myJobs');
+    };
+
+    addJobNeeds = () => {
+        this.addWidget('jobNeeds');
+    };
+
+    addJobQuestions = () => {
+        this.addWidget('jobQuestions');
     };
 
     removeWidget(guid) {
@@ -110,27 +127,40 @@ class App extends Component {
     }
 
     render() {
+        let dash = null;
+        if (this.state.loading) {
+            dash = <div>loading...</div>;
+        } else {
 
-        const widgets = this.state.widgets.map((widget) => {
-            return this.makeWidget(widget)
-        });
+            const widgets = this.state.widgets.map((widget) => {
+                return this.makeWidget(widget)
+            });
+            dash = <GridLayout className="layout"
+                               layout={this.state.layout}
+                               onLayoutChange={this.layoutChange}
+                               cols={12}
+                               rowHeight={120}
+                               width={800}>
+                {widgets}
+            </GridLayout>
+        }
+
 
         return (
             <div className="App">
-
                 <header>
                     <h2>Dashboard</h2>
-                    <button onClick={this.addWidget}>Add Widget</button>
+                    <button onClick={this.addMyJobs}>
+                        Add My Jobs in Scout
+                    </button>
+                    <button onClick={this.addJobNeeds}>
+                        Add Jobs that Need Love
+                    </button>
+                    <button onClick={this.addJobQuestions}>
+                        Add Job Questions
+                    </button>
                 </header>
-
-                <GridLayout className="layout"
-                            layout={this.state.layout}
-                            onLayoutChange={this.layoutChange}
-                            cols={12}
-                            rowHeight={120}
-                            width={800}>
-                    {widgets}
-                </GridLayout>
+                {dash}
             </div>
         );
     }

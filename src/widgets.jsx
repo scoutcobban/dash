@@ -32,9 +32,13 @@ export class Widget extends React.Component {
 
 export class MyJobsWidget extends React.Component {
     constructor(props) {
-        console.log("props", props);
         super(props);
-        this.state = {count: 0, jobs: [], loading: true};
+        this.state = {
+            filter: this.props.filter || 'open',
+            count: 0,
+            jobs: [],
+            loading: true
+        };
     }
 
     componentDidMount() {
@@ -42,9 +46,9 @@ export class MyJobsWidget extends React.Component {
     }
 
     loadData() {
-        console.log("getting MyJobsWidget " + this.props.filter);
-        getMyJobsData(this.props.filter, (data) => {
-            console.log(this.props.filter, "data", data);
+        console.log("getting MyJobsWidget " + this.state.filter);
+        getMyJobsData(this.state.filter, (data) => {
+            console.log(this.state.filter, "data", data);
             this.setState({...data, loading: false});
         });
     }
@@ -53,7 +57,7 @@ export class MyJobsWidget extends React.Component {
         console.log("configChange", this.props, this.state);
         const fakeConfig = {filter: "paused"};
         this.props.setConfig(fakeConfig);
-        this.setState({loading: true});
+        this.setState({loading: true, filter: 'paused'});
         this.loadData();
     };
 
@@ -66,7 +70,7 @@ export class MyJobsWidget extends React.Component {
             return <div key={job.reqId}>Job: {job.title} ({job.reqId})</div>
         });
         return <div>
-            {this.props.filter} job count: {count}.<br/>
+            {this.state.filter} job count: {count}.<br/>
             {jobs}
             <button onClick={this.configChange}>change config</button>
         </div>;
@@ -75,12 +79,24 @@ export class MyJobsWidget extends React.Component {
 
 export class JobNeedsWidget extends React.Component {
     render() {
-        return <div>Rat Surgeon (A2019ED)<br/> - Why do this job?</div>;
+        return <div>
+            <span>Software Wrangler (A2018EF)</span>
+            <ul>
+                <li>Submission: Joe Joeson</li>
+                <li>Submission: James Jameson</li>
+            </ul>
+        </div>
     }
 }
 
 export class JobQuestionsWidget extends React.Component {
     render() {
-        return <div>What is your favorite color?</div>;
+        return <div>
+            <span>Rat Surgeon (A2019ED)</span>
+            <ul>
+                <li>Why do this job?</li>
+                <li>What is your favorite color?</li>
+            </ul>
+        </div>;
     }
 }
