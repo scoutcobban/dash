@@ -33,6 +33,19 @@ const WIDGET_LIBRARY = {
 };
 
 class App extends Component {
+    render() {
+        return (
+            <div className="App">
+                <header>
+                    <h2>Dashboard</h2>
+                </header>
+                <Dashboard user={"Eamon Cournane"}/>
+            </div>
+        );
+    }
+}
+
+class Dashboard extends Component {
     static defaultProps = {
         className: "layout",
         items: 20,
@@ -131,7 +144,6 @@ class App extends Component {
         if (this.state.loading) {
             dash = <div>loading...</div>;
         } else {
-
             const widgets = this.state.widgets.map((widget) => {
                 return this.makeWidget(widget)
             });
@@ -147,9 +159,8 @@ class App extends Component {
 
 
         return (
-            <div className="App">
-                <header>
-                    <h2>Dashboard</h2>
+            <div>
+                <div className="controls">
                     <button onClick={this.addMyJobs}>
                         Add My Jobs in Scout
                     </button>
@@ -159,7 +170,7 @@ class App extends Component {
                     <button onClick={this.addJobQuestions}>
                         Add Job Questions
                     </button>
-                </header>
+                </div>
                 {dash}
             </div>
         );
