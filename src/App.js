@@ -13,13 +13,12 @@ import {
 } from "./widgets";
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
-// const ReactGridLayout = WidthProvider(RGL);
 
-// Register all the widgets here, limit which role can add what
+// Register all the widgets here, limit which role can add what?
 const WIDGET_LIBRARY = {
     myJobs: {
         component: MyJobsWidget,
-        roles: ["job-owner"],
+        roles: ["jobOwner"],
         title: "My Jobs in Scout"  // todo make this dynamic?
     },
     jobNeeds: {
@@ -46,14 +45,6 @@ class App extends Component {
 }
 
 class Dashboard extends Component {
-    static defaultProps = {
-        className: "layout",
-        items: 20,
-        rowHeight: 30,
-        onLayoutChange: function () {
-        },
-        cols: 12
-    };
 
     constructor(props) {
         super(props);
@@ -147,7 +138,8 @@ class Dashboard extends Component {
             const widgets = this.state.widgets.map((widget) => {
                 return this.makeWidget(widget)
             });
-            dash = <GridLayout className="layout"
+            dash = (
+                <GridLayout className="layout"
                                layout={this.state.layout}
                                onLayoutChange={this.layoutChange}
                                cols={12}
@@ -155,6 +147,7 @@ class Dashboard extends Component {
                                width={800}>
                 {widgets}
             </GridLayout>
+            )
         }
 
 

@@ -24,7 +24,6 @@ export class Widget extends React.Component {
         };
         const widget = React.createElement(this.props.component, props);
         return <div className="widget-frame">
-            {/*<div className="widget-title">{this.props.title}</div>*/}
             <div className="widget-body">{widget}</div>
         </div>
     }
@@ -34,7 +33,7 @@ export class MyJobsWidget extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            filter: this.props.filter || 'open',
+            filter: this.props.filter || 'open',  // default config
             count: 0,
             jobs: [],
             loading: true
@@ -54,10 +53,11 @@ export class MyJobsWidget extends React.Component {
     }
 
     configChange = () => {  // This NEEDS to be an arrow func for callback
-        console.log("configChange", this.props, this.state);
-        const fakeConfig = {filter: "paused"};
-        this.props.setConfig(fakeConfig);
-        this.setState({loading: true, filter: 'paused'});
+        const filter = "paused";
+        console.log(`configChange to ${filter}`);
+        const fakeConfig = {filter: filter};
+        this.props.setConfig(fakeConfig);  // Widget class saves it to db.
+        this.setState({loading: true, filter: filter});
         this.loadData();
     };
 

@@ -1,5 +1,6 @@
 import uuidv1 from "uuid/v1";
 
+// This is used to give a faux asynchronous delay of load
 function delayPromise(duration) {
     return function (cb, data) {
         return new Promise(function (resolve) {
