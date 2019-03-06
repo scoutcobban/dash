@@ -1,4 +1,4 @@
-import uuidv1 from "uuid/v1";
+import uuidv1 from "node-uuid";
 
 // This is used to give a faux asynchronous delay of load
 function delayPromise(duration) {
@@ -27,14 +27,20 @@ export function getUserDashboardConfig(user, success) {
     const guid3 = uuidv1();
     const layout = [
         {i: guid1, x: 0, y: 0, w: 4, h: 1},
-        {i: guid2, x: 4, y: 0, w: 4, h: 1},
-        {i: guid3, x: 8, y: 0, w: 4, h: 1}
+        {i: guid2, x: 4, y: 0, w: 4, h: 2},
+        {i: guid3, x: 8, y: 0, w: 4, h: 3}
     ];
     const widgets = [
         {key: guid1, name: 'myJobs', config: {filter: "open"}},
         {key: guid2, name: 'myJobs', config: {filter: "closed"}},
         {key: guid3, name: 'jobQuestions', config: {jobId: "*"}}
     ];
+    const breakpoints = {
+        lg: layout,
+        md: layout,
+        sm: layout
+    }
+    console.log("breakpoints", breakpoints);
     let apiUserDashboard = delayPromise(Math.floor(Math.random() * 2000));
     apiUserDashboard(success, {layout, widgets});
 }

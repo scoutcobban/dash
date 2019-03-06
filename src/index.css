@@ -1,7 +1,15 @@
+:root {
+  --scout-dk-blue: #255b80;
+  --break-lg: 1200px;
+  --break-md: 900px;
+  --break-sm: 600px;
+}
+
 body {
+  color: var(--scout-dk-blue);
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+  font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -13,28 +21,90 @@ code {
     monospace;
 }
 
-
-.widget-title {
-  font-weight: bold;
-  border: 1px solid #61dafb;
-  display: inline-block;
-  width: 100%;
-}
-
-
-.widget-frame {
-  border: 1px solid #61dafb;
-  box-shadow: 0 2px 3px rgba(0,0,0,0.16);
-  display: inline-block;
-  margin: 0 0 1.5em;
-  width: 100%;
-}
-
 header {
   background-color: #666;
   padding: 3px;
   text-align: left;
   font-size: 15px;
-  display: flow;
   color: white;
+}
+
+button {
+  background-color: beige;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.wrapper {
+  max-width: 376px;
+  margin: 0 auto;
+  outline: 1px solid black;
+}
+
+@media (min-width: 772px) {
+  .wrapper {
+    max-width: 100%;
+    outline: 1px solid red;
+    width: 762px;
+  }
+}
+
+@media (min-width: 1148px) {
+  .wrapper {
+    max-width: 100%;
+    outline: 1px solid orange;
+    width: 1138px;
+  }
+}
+
+@media (min-width: 1524px) {
+  .wrapper {
+    max-width: 100%;
+    outline: 1px solid green;
+    width: 1514px;
+  }
+}
+
+.widget-header {
+  display: flex;
+  border-bottom: 1px solid #c8d6df;
+  padding: 3px;
+}
+
+.widget-title {
+  margin: 0;
+  flex: 1;
+  font-size: 14px;
+}
+
+.widget-header-actions {
+  display: flex;
+  flex: 0;
+}
+
+.widget-header-actions > span {
+  color: var(--scout-dk-blue);
+  display: flex;
+  align-items: baseline;
+  padding: 3px 6px;
+  text-decoration: none;
+}
+
+.widget-header-actions > span:hover {
+  outline: 1px solid white;
+}
+
+.grab {
+  cursor: move;
+}
+
+.widget-frame {
+  display: inline-block;
+  margin: 0 0 1.5em;
+}
+
+.react-grid-item {
+  background-color: lightyellow;
+  border: 1px solid #c8d6df;
+  box-shadow: 0 2px 3px rgba(0,0,0,0.16);
 }

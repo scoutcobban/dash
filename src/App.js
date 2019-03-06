@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
-import GridLayout from 'react-grid-layout';
-import uuidv1 from "uuid/v1";
+import { Responsive, WidthProvider } from 'react-grid-layout';
+import uuidv1 from 'node-uuid';
 import _ from 'lodash';
-
 
 import {getUserDashboardConfig} from "./api";
 import {
@@ -13,6 +12,8 @@ import {
 } from "./widgets";
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
+
+const ResponsiveGridLayout = WidthProvider(Responsive);
 
 // Register all the widgets here, limit which role can add what?
 const WIDGET_LIBRARY = {
@@ -108,21 +109,20 @@ class Dashboard extends Component {
     }
 
     makeWidget(widget) {
-        const removeStyle = {
-            position: "absolute",
-            right: "2px",
-            top: 0,
-            cursor: "pointer"
-        };
         const component = WIDGET_LIBRARY[widget.name].component;
         const title = WIDGET_LIBRARY[widget.name].title;
         return <div key={widget.key}>
-            <div>
-                <span className="widget-title">{title}</span>
-                <span className="remove"
-                      style={removeStyle}
-                      onClick={this.removeWidget.bind(this, widget.key)}
-                >x</span>
+            <div className="widget-header">
+                <h4 className="widget-title">
+                    {title}
+                </h4>
+                <div className="widget-header-actions">
+                    <span className="remove"
+                       href="#"
+                       onClick={this.removeWidget.bind(this, widget.key)}
+                    >x</span>
+                    <span className="grab">&#8214;</span>
+                </div>
             </div>
             <Widget guid={widget.key}
                     component={component}
@@ -139,20 +139,21 @@ class Dashboard extends Component {
                 return this.makeWidget(widget)
             });
             dash = (
-                <GridLayout className="layout"
-                               layout={this.state.layout}
-                               onLayoutChange={this.layoutChange}
-                               cols={12}
-                               rowHeight={120}
-                               width={800}>
-                {widgets}
-            </GridLayout>
+                <ResponsiveGridLayout
+                    className="layout"
+                    layout={this.state.layout}
+                    onLayoutChange={this.layoutChange}
+                    breakpoints={{lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0}}
+                    rowHeight={120}
+                    cols={{lg: 12, md: 10, sm: 6, xs: 4, xxs: 2}}>
+                    {widgets}
+                </ResponsiveGridLayout>
             )
         }
 
 
         return (
-            <div>
+            <div className="wrapper">
                 <div className="controls">
                     <button onClick={this.addMyJobs}>
                         Add My Jobs in Scout
